@@ -1,33 +1,52 @@
 <template>
     <div class="container">
         <div class="card">
+
             <div class="header ">
                 <h1 class="text-center text-5xl font-bold mt-5">Login</h1>
             </div>
+
             <div class="body flex items-center flex-col pt-10">
                 <!-- form text di ambil dari components -->
                 <FormText name="Email" v-model="Email" typeForm="text" />
                 <FormText name="Password" v-model="password" :typeForm="ShowPassword ? 'text' : 'password'" />
             </div>
+
             <div class="footer mx-10">
                 <FormCheck name="Show Password" v-model="ShowPassword" />
                 <div class="mt-10"></div>
                 <FormButton name="Login" @click="login" :isLoading="isLoading"/>
             </div>
+
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
     import { ref } from 'vue';
-
+    const { $api } = useNuxtApp();
+    
     const Email = ref('');
     const password = ref('');
     const ShowPassword = ref(false);
     const isLoading = ref(false);
 
-    const login = () =>{
+    const login = async () =>{
         isLoading.value = true
+
+        try {
+            const response = await $api('auth/login',{
+                method: 'POST',
+                body: {
+                    email: Email.value,
+                    password: password.value
+                }
+            })
+            isLoading.value = false
+            console.log(response)
+        } catch (error) {
+            isLoading.value = false
+        }
     }
 
 
