@@ -7,7 +7,12 @@ export default defineNuxtPlugin(() => {
     credentials: "include",
 
     async onResponseError({response, request, options}){
+      const requestUrl = typeof request === "string" ? request : request.url;
+
       if(response.status === 401){
+          if (requestUrl.includes("/auth/login") || requestUrl.includes("/auth/register") ) {
+            return Promise.reject(response);
+          }
           const refresh = await $fetch<{data: {token: string}}>("auth/refresh-token", {
               method: "POST",
           }).catch(()=> null)
@@ -16,6 +21,7 @@ export default defineNuxtPlugin(() => {
 
           if(!refresh){
             router.push("/auth/login")
+            return
           }else{
             accessToken = refresh.data.token
             localStorage.setItem("access_token", accessToken)
