@@ -1,6 +1,6 @@
 <template>
     <div class="mb-5">
-        <div class="relative w-100">
+        <div class="relative">
             <input :value="modelValue"  :type="typeForm" @input="(event) => {const target = event.target as HTMLInputElement; $emit('update:modelValue', target.value)}" 
                 :id="name" 
                 :class="[

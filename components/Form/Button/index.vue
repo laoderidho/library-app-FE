@@ -1,7 +1,8 @@
 <template>
-    <button  type="button" class="btn-submit text-white bg-[#050708] hover:bg-[#050708]/80 focus:ring-4 
+    <button  type="button" class="btn-submit text-white bg-[#050708] 
+      hover:bg-[#050708]/80 focus:ring-4 
         focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg py-3
-        text-xl w-100 hover:bg-black-600 flex justify-center"
+        text-xl w-full hover:bg-black-600 flex justify-center"
         @click="emit('click')"
     >
     <div v-if="isLoading" class="mx-2 mt-1">
