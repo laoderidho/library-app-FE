@@ -21,7 +21,7 @@ export const ValidateNull = (validInput: iValidationContextIsNULL): boolean => {
         // @ts-ignore
         const isEmpty = !validInput.input[field]
         // @ts-ignore
-        validInput.messages[field] = isEmpty ? `${field.charAt(0).toUpperCase() + field.slice(1)} tidak boleh kosong` : "";
+        validInput.messages[field] = isEmpty ? "tidak boleh kosong" : "";
         // @ts-ignore
         validInput.validStates[field] = isEmpty ? true : false
         if (isEmpty) isValid = false;

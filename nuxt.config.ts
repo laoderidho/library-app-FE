@@ -5,14 +5,22 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+
   vite:{
     plugins: [
       tailwindcss()
     ], 
   },
+
   runtimeConfig: {
     public: {
       SERVER_API: process.env.NUXT_PUBLIC_SERVER_API
     }
-  }
+  },
+
+  modules: [
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
+  ],
+  
 })

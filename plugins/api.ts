@@ -1,6 +1,7 @@
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const router = useRouter();
+  const auth = useAuthStore()
 
   const api = $fetch.create({
     baseURL: config.public.SERVER_API,
@@ -8,6 +9,11 @@ export default defineNuxtPlugin(() => {
 
     async onResponseError({response, request, options}){
       const requestUrl = typeof request === "string" ? request : request.url;
+
+
+      if (response.status === 403){
+          router.push("/forbidden")
+      }
 
       if(response.status === 401){
           if (requestUrl.includes("/auth/login") || requestUrl.includes("/auth/register") ) {
@@ -24,7 +30,7 @@ export default defineNuxtPlugin(() => {
             return
           }else{
             accessToken = refresh.data.token
-            localStorage.setItem("access_token", accessToken)
+            auth.setToken(accessToken)
           }
 
           return $fetch(request, {

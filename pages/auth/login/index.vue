@@ -40,8 +40,13 @@
 
 <script setup lang="ts">
     import { ref } from 'vue';
+    import { useAuthStore } from '~/stores/auth';
     import { handleValidationErrors, ValidateNull } from '~/utils/validateError';
+    import { userId, adminId } from '~/utils/variable';
+
     const { $api } = useNuxtApp();
+    // pinia state management
+    const auth = useAuthStore();
 
     // this input containe fields in form 
     const input = ref<Record<string, any>>({});
@@ -54,7 +59,7 @@
     const wrongPassword = ref(false);
     const messageWrongPassword = ref('');
 
-    // declace input is not null
+    // declare input is not null
     const elemenFormValue = ["email", "password"]
 
     const login = async () =>{
@@ -80,7 +85,19 @@
                     email: input.value["email"],
                     password: input.value["password"]
                 }
-            })
+            }) as any
+
+            if(response.status == 'success'){
+                auth.setToken(response.token)
+                auth.setRole(response.role)
+            }
+            console.log(auth.getToken)
+
+            // if(auth.getRole == userId){
+            //     await navigateTo('/user/home')
+            // }else if(auth.getRole == adminId){
+            //     await navigateTo('/admin/home')
+            // }
             isLoading.value = false
         } catch (error: any) {
             isLoading.value = false
@@ -98,6 +115,12 @@
         }
     }
 
+    onMounted(async ()=>{
+
+       const token = auth.getToken
+        console.log(token)
+    })
+
     watch(wrongPassword, (value) =>{
         if(value){
             setTimeout(() => {
@@ -106,7 +129,6 @@
             }, 3000);
         }
     })
-
 </script>
 
 
