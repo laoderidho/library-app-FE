@@ -93,11 +93,11 @@
             }
             console.log(auth.getToken)
 
-            // if(auth.getRole == userId){
-            //     await navigateTo('/user/home')
-            // }else if(auth.getRole == adminId){
-            //     await navigateTo('/admin/home')
-            // }
+            if(auth.getRole == userId){
+                await navigateTo('/user/home')
+            }else if(auth.getRole == adminId){
+                await navigateTo('/admin/home')
+            }
             isLoading.value = false
         } catch (error: any) {
             isLoading.value = false
