@@ -1,5 +1,5 @@
 <template>
-    <h1>This Admin Home</h1>
+    this is admin book page
 </template>
 
 <script setup lang="ts">

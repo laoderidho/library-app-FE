@@ -91,8 +91,7 @@
                 auth.setToken(response.token)
                 auth.setRole(response.role)
             }
-            console.log(auth.getToken)
-
+            
             if(auth.getRole == userId){
                 await navigateTo('/user/home')
             }else if(auth.getRole == adminId){

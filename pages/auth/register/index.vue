@@ -99,8 +99,6 @@
                 }
             }) as any;
 
-            console.log(response.status)
-
             if(response.status == 'success'){
                 router.push({path: "/auth/login"})
             }

@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     const token = auth.getToken
 
     // Jangan cek apa-apa kalau user di halaman login atau forbidden
-    if (to.path === '/auth/login' || to.path === '/forbidden') {
+    if (to.path === '/auth/login' || to.path === '/forbidden' || to.path === '/auth/register') {
         return
     }
     // Kalau belum login, redirect ke login

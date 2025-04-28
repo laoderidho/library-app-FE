@@ -10,7 +10,6 @@ export default defineNuxtPlugin(() => {
     async onResponseError({response, request, options}){
       const requestUrl = typeof request === "string" ? request : request.url;
 
-
       if (response.status === 403){
           router.push("/forbidden")
       }
@@ -26,7 +25,7 @@ export default defineNuxtPlugin(() => {
           let accessToken: string = ""
 
           if(!refresh){
-            router.push("/auth/login")
+            // router.push("/auth/login")
             return
           }else{
             accessToken = refresh.data.token

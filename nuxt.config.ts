@@ -23,6 +23,10 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt'
   ],
   plugins: [
-    '~/plugins/flowbite.client.ts'
+    '~/plugins/flowbite.client.ts',
+    {src: '~/plugins/easy-data-table.ts', mode: 'client'},
+  ], 
+  css: [
+    'vue3-easy-data-table/dist/style.css',
   ]
 })
