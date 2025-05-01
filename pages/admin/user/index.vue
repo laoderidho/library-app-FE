@@ -1,6 +1,9 @@
 <template>
     <h1 class="m-10 text-2xl font-bold">User Data</h1>
-
+    <div class="toast">
+        <!-- <AlertToastSuccess :show="showToast"/> -->
+    </div>
+    
     <div class="la-card-large m-10 rounded-sm">
         <div class="mb-10">
             <div class="m-10 pt-10">
@@ -15,13 +18,22 @@
                     buttons-pagination
                     :rows-per-page="10"
                 >
-                    <template #item-action="{ id }">
-                        <button @click="openModal" class="px-2 my-1 py-1 bg-blue-500 text-white rounded">
+                    <template #item-action="{ roleId, id }">
+                        <button @click="openModal(roleId)" class="px-2 my-1 py-1 bg-blue-500 text-white rounded">
                                 Edit
                         </button>
                          <Modal :show="isModalOpen" @close="closeModal">
                             <h2 class="text-xl font-bold mb-4">Ubah Role</h2>
-                            <FormSelect label="Role" selectLabel="role" :data="roleData.value" :value="id"/>
+                            <FormSelect 
+                                label="Role" 
+                                selectLabel="role" 
+                                :data="roleData.value" 
+                                v-model="input.role"
+                            />
+
+                            <div>
+                                <FormButton name="Simpan" @click="saveRole(id)" class="mt-4" :is-loading="isloading" />
+                            </div>
                         </Modal>
                     </template>
                 </EasyDataTable>
@@ -36,8 +48,14 @@
 
 <script setup lang="ts">
     import { ref } from 'vue'
+    import { toast } from 'vue3-toastify';
+
     const { $api } = useNuxtApp()
     const auth = useAuthStore()
+
+     // this input containe fields in form 
+    const input = ref<Record<string, any>>({});
+    const isloading = ref(false)
 
     import type { Header, Item } from "vue3-easy-data-table"
     const headers: Header[] = [
@@ -72,10 +90,37 @@
         return data.data
     }
 
+    const saveRole = async (id: number) => {
+        isloading.value = true
+        try {
+            await $api('admin/data/user/change-role', {
+                method: 'POST',
+                headers: {
+                    Authorization: `${auth.getToken}`
+                },
+                body: {
+                    id: id,
+                    roleId: input.value.role
+                }
+            }) as any
+            isloading.value = false
+            getData()
+            const { data } = await useAsyncData('userData', getData)
+            items.value = data
+            isModalOpen.value = false
+            toast.success("Berhasil!", {
+                autoClose: 2000,
+            })
+        } catch (error) {
+            
+        }
+    }
+
     // modal variable
     const isModalOpen = ref(false)
-    const openModal = () => {
+    const openModal = (roleId: number) => {
         isModalOpen.value = true
+        input.value.role = roleId
     }
     const closeModal = () => {
         isModalOpen.value = false
@@ -97,6 +142,13 @@
         font-size: 2rem;
         font-weight: bold;
         margin-bottom: 1rem;
+    }
+
+    .toast {
+        position: fixed;
+        top: 5rem;
+        right: 1rem;
+        z-index: 9999;
     }
 </style>
 
