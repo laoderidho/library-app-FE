@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   ],
   plugins: [
     '~/plugins/flowbite.client.ts',
-    {src: '~/plugins/easy-data-table.ts', mode: 'client'},
+    {src: '~/plugins/easy-data-table.ts', mode: 'client'}
   ], 
   css: [
     'vue3-easy-data-table/dist/style.css',
