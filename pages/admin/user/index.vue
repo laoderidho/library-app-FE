@@ -1,5 +1,5 @@
 <template>
-    <h1 class="m-10 text-2xl font-bold">User Data</h1>
+    <h1 class="m-10 text-2xl font-bold">Data User</h1>
     
     <div class="la-card-large m-10 rounded-sm">
         <div class="mb-10">
