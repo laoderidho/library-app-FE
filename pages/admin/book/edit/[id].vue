@@ -1,9 +1,9 @@
 <template>
-    <div class="container mx-auto">
+     <div class="container mx-auto">
         <BreadCrumb :data="routeLink" />
 
         <div class="flex justify-between ">
-            <h1 class="m-10 text-2xl font-bold">Tambah Buku</h1>
+            <h1 class="m-10 text-2xl font-bold">Edit Buku</h1>
         </div>
 
         <div class="la-card-large mx-10 rounded-sm">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-span-2">
-                    <FormButton name="Simpan" @click="save" :isLoading="isLoading" />
+                    <FormButton name="Simpan Perubahan" @click="save" :isLoading="isLoading" />
                 </div>
             </div>
         </div>
@@ -40,13 +40,13 @@
 </template>
 
 <script setup lang="ts">
-    // Import
-    import { ref } from 'vue'
-    import { useAuthStore } from '@/stores/auth'
-    import { ValidateNull, handleValidationErrors } from '~/utils/validateError';
-    const { $api } = useNuxtApp()
-    import { toast } from 'vue3-toastify'
+    //import
+    const route = useRoute()
     const router = useRouter()
+    const { $api } = useNuxtApp()
+    import { handleValidationErrors, ValidateNull } from '~/utils/validateError';
+    import { toast } from 'vue3-toastify'
+
 
     // Ref
     const input = ref<Record<string, any>>({});
@@ -54,6 +54,8 @@
     const messages = ref<Record<string, string>>({});
     const isLoading = ref(false);
     const token = useAuthStore().getToken
+    const params = route.params.id
+
 
     // Route Link
     const routeLink = [
@@ -63,11 +65,10 @@
         },
         {
             link: '',
-            label: 'Add Book'
+            label: 'Edit Book'
         }
     ]
 
-    // function
     const save = async () =>{
         isLoading.value = true
          // check if this value isNull
@@ -84,7 +85,7 @@
         }
 
         try {
-            const response = await $api('admin/book/add-book', {
+            const response = await $api(`admin/book/update-book/${params}`, {
                 method: 'POST',
                 body: {
                     title: input.value["title"],
@@ -99,7 +100,7 @@
             }) as any;
 
             if(response.status == 'success'){
-                toast.success('Berhasil menambahkan buku')
+                toast.success('Berhasil Mengubah buku')
 
                 setTimeout(() => {
                     router.push({path: "/admin/book"})
@@ -118,8 +119,26 @@
         }
     }
 
-    // Define Layouting
-    definePageMeta({
+    const getData = async () => {
+        await $api(`admin/book/get-book/${params}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `${token}`
+            }
+        }).then((res: any) => {
+            input.value = res.data
+        }).catch(() => {
+            
+        })
+    }
+
+    // Mounted
+    onMounted(() => {
+        getData()
+    })
+
+   // Define Layouting
+   definePageMeta({
         layout: 'admin'
     })
 </script>
